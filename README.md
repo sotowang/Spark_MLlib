@@ -1,3 +1,165 @@
+# Spark MLlib基础
+
+参考资料: <<SPARK MLLIB机器学习_黄美灵>>
+
+## 机器学习类别:
+
+* 监督学习
+    
+输入数据被称为训练数据,有已知的标签或结果,比如垃圾邮件/非垃圾邮件或者某段时间的股票价格.
+
+模型参数的确定需要一个训练过程
+
+常见的监督学习算法包括: 回归分析和统计分类
+
+* 无监督学习
+
+输入数据不带标签或没有一个已知结果,通过推测输入数据中存在的结构来建立模型
+    
+常见算法: 聚类
+
+* 半监督学习
+
+输入数据由带标签和不带标签组成,合适的预测模型虽已存在,但模型在预测的同时还必须通过发现潜在的结构来组织数据,这类问题包括分类和回归
+
+
+* 强化学习
+
+例如,和纽约州和机器人控制
+
+常见算法:Q学习,时序差分学习
+
+## 常见机器学习算法:
+
+```markdown
+
+分类与回归: 线性回归,逻辑回归,贝叶斯分类,决策树分类
+聚类: KMeans聚类,LDA主题,KNN
+关联规则: Apriori,FPGrowth
+推荐:协同过滤,ALS
+神经网络:BP,RBF,SVM
+深度神经网络等算法
+```
+
+## MLlib Statistic统计操作 ML_Statistics.java
+
+MLlib Statistics是基础统计模块,是对RDD格式数据进行统计,
+包括:
+
+```markdown
+
+汇总统计,相关系数,分层抽样,假设检验,随机数据生成等 
+```
+
+### 列统计汇总(Summary statistics )
+
+[Data Types - MLlib](http://spark.apache.org/docs/1.6.0/mllib-data-types.html#data-types-mllib )
+
+Statistics的colStats函数是列统计方法,该方法可以计算每列最大值,最小值,平均值,方差值,L1范数,L2范数
+
+[L1，L2范数](https://www.jianshu.com/p/73748dc4dea1)
+
+> L1范数是指向量中各个元素的绝对值之和
+
+> L2范数是指向量各元素的平方和然后开方
+
+总结：
+
+```
+L1范式趋向于产生较少特征，在特征选择时很有用；
+
+L2会选择更多特征，但对应权值会接近0
+
+```
+
+#### Local vector
+
+> A local vector has integer-typed and 0-based indices and double-typed values, 
+stored on a single machine. MLlib supports two types of local vectors: dense and sparse.
+ A dense vector is backed by a double array representing its entry values, 
+ while a sparse vector is backed by two parallel arrays: indices and values. 
+ For example, a vector (1.0, 0.0, 3.0) can be represented in dense format as [1.0, 0.0, 3.0] or in sparse format as (3, [0, 2], [1.0, 3.0]), 
+ where 3 is the size of the vector.
+
+The base class of local vectors is Vector, and we provide two implementations: 
+DenseVector and SparseVector. We recommend using the factory methods implemented in Vectors to create local vectors.
+
+
+#### Stastics.colStats()方法
+
+
+colStats() returns an instance of MultivariateStatisticalSummary, 
+which contains the column-wise max, min, mean, variance, and number of nonzeros, as well as the total count.
+
+```markdown
+JavaRDD<String> lines = jsc.textFile("/home/sotowang/user/aur/ide/idea/idea-IU-182.3684.101/workspace/Spark_MLlib/src/resources/sample_stat.txt");
+
+JavaRDD<Vector> vectorRDD = lines.map(new Function<String, Vector>() {
+    @Override
+    public Vector call(String v1) throws Exception {
+        String[] splited = v1.split("\t");
+        return Vectors.dense(Double.valueOf(splited[0]), Double.valueOf(splited[1]), Double.valueOf(splited[2]), Double.valueOf(splited[3]), Double.valueOf(splited[4]));
+    }
+
+});
+
+MultivariateStatisticalSummary summary = Statistics.colStats(vectorRDD.rdd());
+System.out.println(summary.max());
+System.out.println(summary.min());
+System.out.println(summary.mean());
+System.out.println(summary.variance());
+System.out.println(summary.normL1());
+System.out.println(summary.normL2());
+```
+
+### 相关系数(Correlations)
+
+Pearson 相关系数表达的是两个数值变量的线性相关性,它一般适用于正态分布,其聚会范围为[-1,1],取值为0表示不相关,取值为(0~-1]表示
+正相关
+
+
+Spearman相关系数也用来表达两个变量的收到性,但是它没有Pearson相关系数驿变量的分布要求那么严格,另外Spearman相关系数可以更好地用于测度变量的排序关系
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----
+
+
 # 推荐系统设计
 
 * 需求分析与用户调研
