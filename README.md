@@ -114,15 +114,65 @@ System.out.println(summary.normL2());
 
 ### 相关系数(Correlations)
 
+>Calculating the correlation between two series of data is a common operation in Statistics. In spark.mllib we provide the flexibility to calculate pairwise correlations among many series. The supported correlation methods are currently Pearson’s and Spearman’s correlation.
+
 Pearson 相关系数表达的是两个数值变量的线性相关性,它一般适用于正态分布,其聚会范围为[-1,1],取值为0表示不相关,取值为(0~-1]表示
 正相关
 
 
 Spearman相关系数也用来表达两个变量的收到性,但是它没有Pearson相关系数驿变量的分布要求那么严格,另外Spearman相关系数可以更好地用于测度变量的排序关系
 
+```markdown
+//计算Pearson系数,Spearman相关系数
+Matrix pearsonMatrix = Statistics.corr(vectorRDD.rdd(), "pearson");
+Matrix spearmanMatrix = Statistics.corr(vectorRDD.rdd(), "spearman");
+
+JavaDoubleRDD seriesX = jsc.parallelize(Arrays.asList(1.0, 2.0, 3.0, 4.0)).mapToDouble(new DoubleFunction<Double>() {
+    @Override
+    public double call(Double aDouble) throws Exception {
+        return aDouble;
+    }
+});
+JavaDoubleRDD seriesY = jsc.parallelize(Arrays.asList(5.0, 6.0, 6.0, 6.0)).mapToDouble(new DoubleFunction<Double>() {
+    @Override
+    public double call(Double aDouble) throws Exception {
+        return aDouble;
+    }
+});
+
+JavaRDD<Double> a = jsc.parallelize(Arrays.asList(1.0, 2.0, 3.0, 4.0));
+JavaRDD<Double> b = jsc.parallelize(Arrays.asList(5.0, 6.0, 6.0, 6.0));
+Double correlation1 = Statistics.corr(a,b, "pearson");
+
+Double correlation2 = Statistics.corr(seriesX.srdd(), seriesY.srdd(), "pearson");
+```
 
 
+### 假设检验
 
+MLlib当前支持用于判断拟合度或者独立性的Pearson卡方检验.不同的输入类型决定了是做拟合度检验还是独立性检验.
+
+拟合度检验要求输入为Vector,独立性检验要求输入为Matrix
+
+```markdown
+//卡方检验
+Vector v1 = Vectors.dense(43.0, 9.0);
+Vector v2 = Vectors.dense(44.0, 4.0);
+ChiSqTestResult c1 = Statistics.chiSqTest(v1, v2);
+
+System.out.println(c1.toString());
+```
+
+结果: 统计量为pearson,自由度为1,值为5.48,概率为0.019
+
+```markdown
+Chi squared test summary:
+method: pearson
+degrees of freedom = 1 
+statistic = 5.482517482517483 
+pValue = 0.01920757707591003 
+Strong presumption against null hypothesis: observed follows the same distribution as expected..
+```
 
 
 

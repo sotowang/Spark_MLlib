@@ -11,6 +11,7 @@ import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
 import org.apache.spark.mllib.stat.MultivariateStatisticalSummary;
 import org.apache.spark.mllib.stat.Statistics;
+import org.apache.spark.mllib.stat.test.ChiSqTestResult;
 
 import java.util.Arrays;
 
@@ -61,15 +62,30 @@ public class ML_Statistics {
             }
         });
 
-        Double correlation = Statistics.corr(seriesX.srdd(), seriesY.srdd(), "pearson");
+        JavaRDD<Double> a = jsc.parallelize(Arrays.asList(1.0, 2.0, 3.0, 4.0));
+        JavaRDD<Double> b = jsc.parallelize(Arrays.asList(5.0, 6.0, 6.0, 6.0));
+        Double correlation1 = Statistics.corr(a,b, "pearson");
+
+        Double correlation2 = Statistics.corr(seriesX.srdd(), seriesY.srdd(), "pearson");
 
         System.out.println(pearsonMatrix);
         System.out.println("-----------------------------");
         System.out.println(spearmanMatrix);
         System.out.println("-----------------------------");
 
-        System.out.println(correlation);
+        System.out.println(correlation1);
+        System.out.println("-----------------------------");
+        System.out.println(correlation2);
 
+
+
+
+        //卡方检验
+        Vector v1 = Vectors.dense(43.0, 9.0);
+        Vector v2 = Vectors.dense(44.0, 4.0);
+        ChiSqTestResult c1 = Statistics.chiSqTest(v1, v2);
+
+        System.out.println(c1.toString());
 
         jsc.close();
     }
