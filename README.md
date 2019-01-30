@@ -2,6 +2,56 @@
 
 参考资料: <<SPARK MLLIB机器学习_黄美灵>>
 
+Spark MLlib底层的向量,矩阵运算使用了Breeze库,Breeze库提供了Vector/Matrix的实现以及相应计算的接口(Linalg),但是在MLlib里面同时也
+提供了Vector和Linalg等的实现
+
+## Breeze库API总结(Spark线性代数库)
+
+[Breeze库API总结(Spark线性代数库)](https://blog.csdn.net/u012102306/article/details/53463388)
+
+[Spark MLlib之使用Breeze操作矩阵向量](https://www.cnblogs.com/nucdy/p/7988959.html)
+
+### Breeze创建函数:	 	Breeze_test1.scala
+ 
+![深度截图_选择区域_20190130153100.png](https://i.loli.net/2019/01/30/5c5152c15173b.png)
+
+ 
+### Breeze元素访问
+
+![深度截图_选择区域_20190130153145.png](https://i.loli.net/2019/01/30/5c5152fea23a5.png)
+
+
+### Breeze元素操作
+
+![深度截图_选择区域_20190130153311.png](https://i.loli.net/2019/01/30/5c5153437900a.png)
+
+### Breeze数组计算函数
+
+![深度截图_选择区域_20190130153346.png](https://i.loli.net/2019/01/30/5c51538b2c636.png)
+    
+
+### Breeze求和函数
+
+
+![深度截图_选择区域_20190130153524.png](https://i.loli.net/2019/01/30/5c5153c272068.png)
+
+
+### Breeze 布尔函数
+
+![深度截图_选择区域_20190130153615.png](https://i.loli.net/2019/01/30/5c5153f8d2ed3.png)
+
+### Breeze 线性代数函数
+
+
+![深度截图_选择区域_20190130153714.png](https://i.loli.net/2019/01/30/5c5154327b825.png)
+
+
+### Breeze 取整函数
+
+![深度截图_选择区域_20190130153823.png](https://i.loli.net/2019/01/30/5c51548a3a30f.png)
+
+
+
 ## 机器学习类别:
 
 * 监督学习
